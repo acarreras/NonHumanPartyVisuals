@@ -7,11 +7,16 @@ color[] colors2;
 float videoW;
 float videoH;
 
+//noise
+float nStep=0.001;
+float noise1=0;
+
+
 String sortMode = null;
 
 void setup() {
   size(2560, 1080);
-  myMovie = new Movie(this, "CTD1.mov");
+  myMovie = new Movie(this, "../../VIDEOS/CTD1.mov");
   myMovie.play();
   myMovie.loop();
   noStroke();
@@ -25,7 +30,7 @@ void draw() {
   println("Video Width: "+videoW);
   //background(0);
   //image(myMovie, 0, 0);
-  int tileCount =(int) videoW/ max(mouseX, 5);
+  int tileCount =(int) videoW/ max(mouseX, 15);
   float rectSizeX1 = videoW / float(tileCount);
   float rectSizeY1 = videoH / float(tileCount);
   //int tileCount =(int) width / max(mouseX, 5);
@@ -44,7 +49,8 @@ void draw() {
       i++;
     }
   }
-  int tileCount2 =tileCount/2;
+  noise1+=nStep;
+  int tileCount2 =(int)(tileCount*noise(noise1));
   float rectSizeX2 = videoW / float(tileCount2);
   float rectSizeY2 = videoH / float(tileCount2);
   int j = 0; 
@@ -90,11 +96,11 @@ void draw() {
       
       String s=str(colors2[j]);
       r=(int)red(colors2[j]);
-      r=(int)map(r,0,255,255,0);
+     // r=(int)map(r,0,255,255,0);
       g=(int)green(colors2[j]);
-      g=(int)map(g,0,255,255,0);
+     // g=(int)map(g,0,255,255,0);
       b=(int)blue(colors2[j]);
-      b=(int)map(b,0,255,255,0);
+      //b=(int)map(b,0,255,255,0);
       colors2[j]= color(r,g,b);
       stroke(colors2[j]);
       fill(colors2[j]);
