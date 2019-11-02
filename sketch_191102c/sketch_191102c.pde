@@ -158,6 +158,7 @@ void oscEvent(OscMessage theOscMessage) {
   print("### received an osc message.");
   print(" addrpattern: "+theOscMessage.addrPattern());
   println(" typetag: "+theOscMessage.typetag());
+  println(" content: "+theOscMessage.get(0).stringValue());
   
   // PARSE
   if(theOscMessage.checkAddrPattern("/test")==true) {
