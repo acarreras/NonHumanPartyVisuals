@@ -10,7 +10,7 @@ float videoH;
 boolean bfirstFrame = true;
 
 //noise
-float nStep=0.001;
+float nStep=0.1;
 float noise1=0;
 
 String sortMode = null;
@@ -20,7 +20,6 @@ MidiBus myBus;
 
 void setup() {
   size(2560, 1080);
-  
   // MOVIE
   //myMovie = new Movie(this, "../../VIDEOS/CTD1.mov"); // windows
   myMovie = new Movie(this, "station.mov"); // ubuntu
@@ -45,6 +44,7 @@ void draw() {
   float rectSizeY1 = videoH / float(tileCount);
   //int tileCount =(int) width / max(mouseX, 5);
   //float rectSize = height / float(tileCount);
+  textAlign(CENTER,CENTER);
 
   // get colors from image
   int i = 0; 
@@ -60,7 +60,8 @@ void draw() {
     }
   }
   noise1+=nStep;
-  int tileCount2 =(int)(tileCount*noise(noise1));
+  //int tileCount2 =(int)(tileCount/2);//(int)(noise(noise1)*2+1)
+  int tileCount2 =(int)(tileCount/(noise(noise1)*2+1));
   float rectSizeX2 = videoW / float(tileCount2);
   float rectSizeY2 = videoH / float(tileCount2);
   int j = 0; 
@@ -114,7 +115,7 @@ void draw() {
       colors2[j]= color(r,g,b);
       stroke(colors2[j]);
       fill(colors2[j]);
-      textSize(rectSizeY2);
+      textSize((int)(rectSizeY2*(noise(noise1)*2+0.1)));
       int posX=(int)map(gridX*rectSizeX2,0,videoW,0,width);
       int posY=(int)map(gridY*rectSizeY2,0,videoH,0,height);
       //rect(gridX*rectSizeX2, gridY*rectSizeY2, rectSizeX2, rectSizeY2);
