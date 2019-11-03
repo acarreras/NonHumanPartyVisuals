@@ -211,9 +211,12 @@ void oscEvent(OscMessage theOscMessage) {
     soundReceived=theOscMessage.get(0).intValue();
     println(" Value: "+soundReceived);
   }
+  compas++;
+  compas=compas%8;
   if(compas==0){
     changeVideo((int)random(0,4));
-    compas++;
-    compas=compas%8;
+    
+    
+    println("COMPAS");
   }
 }
