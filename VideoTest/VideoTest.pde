@@ -1,33 +1,43 @@
-  
+import themidibus.*; 
 import processing.video.*;
 import generativedesign.*;
+
 Movie myMovie;
 color[] colors;
 color[] colors2;
 float videoW;
 float videoH;
+boolean bfirstFrame = true;
 
 //noise
 float nStep=0.001;
 float noise1=0;
 
-
 String sortMode = null;
+
+// midi
+MidiBus myBus;
 
 void setup() {
   size(2560, 1080);
-  myMovie = new Movie(this, "../../VIDEOS/CTD1.mov");
-  myMovie.play();
-  myMovie.loop();
-  noStroke();
-  noCursor();
   
+  // MOVIE
+  //myMovie = new Movie(this, "../../VIDEOS/CTD1.mov"); // windows
+  myMovie = new Movie(this, "station.mov"); // ubuntu
+  //myMovie.play();
+  myMovie.loop();
+  
+  // SETTINGS
+  noStroke();
+  //noCursor();
+  
+  // MIDI
+  MidiBus.list();
+  myBus = new MidiBus(this, 0, -1);
 }
 
 void draw() {
-  videoW=myMovie.width;
-  videoH=myMovie.height;
-  println("Video Width: "+videoW);
+  
   //background(0);
   //image(myMovie, 0, 0);
   int tileCount =(int) videoW/ max(mouseX, 15);
@@ -129,6 +139,21 @@ void keyReleased(){
   if (key == '7') sortMode = GenerativeDesign.BRIGHTNESS;
   if (key == '8') sortMode = GenerativeDesign.GRAYSCALE;
 }
+ 
 void movieEvent(Movie m) {
   m.read();
+  
+  if(bfirstFrame){
+    videoW=myMovie.width;
+    videoH=myMovie.height;
+    println("Video Width: "+videoW);
+    bfirstFrame = false;
+  }
+}
+
+void controllerChange(int channel, int number, int value) {
+  // Receive a controllerChange
+  println("channel: " + channel);
+  println(" number: " + number);
+  println(" value: " + value);
 }
