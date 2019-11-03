@@ -30,7 +30,7 @@ void setup(){
   colorMode(HSB, 360, 100, 100, 100);
   noStroke();
   //noCursor();
-  img = loadImage("./../CRASH_DUMMY/crash1.jpg");
+  img = loadImage("./../VIDEOS/crash1.jpg");
   img.resize(width,height);
 }
 
