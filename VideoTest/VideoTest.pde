@@ -17,6 +17,13 @@ String sortMode = null;
 
 // midi
 MidiBus myBus;
+int minMedidaTiles = 5;
+int medidaTiles = minMedidaTiles;
+int textSize1 = 12;
+int amountTextSize1 = 0;
+int textSize2 = 12;
+int amountTextSize2 = 0;
+float alphaFondo = 255;
 
 void setup() {
   size(2560, 1080);
@@ -36,26 +43,30 @@ void setup() {
 }
 
 void draw() {
-  
+  // FONDO
   //background(0);
   //image(myMovie, 0, 0);
-  int tileCount =(int) videoW/ max(mouseX, 15);
+  fill(0,0,0,alphaFondo);
+  noStroke();
+  rect(0,0,width,height);
+  
+  // COLORES 1
+  int tileCount =(int) videoW/ max(medidaTiles, minMedidaTiles);
   float rectSizeX1 = videoW / float(tileCount);
   float rectSizeY1 = videoH / float(tileCount);
   //int tileCount =(int) width / max(mouseX, 5);
   //float rectSize = height / float(tileCount);
-  textAlign(CENTER,CENTER);
-
+  
   // get colors from image
   int i = 0; 
   colors = new color[tileCount*tileCount];
-  image(myMovie, 0, 0);
+  //image(myMovie, 0, 0);
   for (int gridY=0; gridY<tileCount; gridY++) {
     for (int gridX=0; gridX<tileCount; gridX++) {
       int px = (int) (gridX * rectSizeX1);
       int py = (int) (gridY * rectSizeY1);
       //colors[i] = img.get(px, py);
-      colors[i] = get(px, py);
+      colors[i] = myMovie.get(px, py);
       i++;
     }
   }
@@ -71,11 +82,11 @@ void draw() {
       int px = (int) (gridX * rectSizeX2);
       int py = (int) (gridY * rectSizeY2);
       //colors[i] = img.get(px, py);
-      colors2[j] = get(px, py);
+      colors2[j] = myMovie.get(px, py);
       j++;
     }
   }
-  background(0);
+  
   // sort colors
   if (sortMode != null) colors = GenerativeDesign.sortColors(this, colors, sortMode);
   
@@ -89,7 +100,8 @@ void draw() {
       
       String s=str(colors[i]);
       stroke(colors[i]);
-      textSize(rectSizeY1);
+      textSize1 = (int)(rectSizeY1 + amountTextSize1);
+      textSize(textSize1);
       int posX=(int)map(gridX*rectSizeX1,0,videoW,0,width);
       int posY=(int)map(gridY*rectSizeY1,0,videoH,0,height);
       //rect(gridX*rectSizeX1, gridY*rectSizeY1, rectSizeX1, rectSizeY1);
@@ -100,11 +112,9 @@ void draw() {
   }
   //BUCLE 2
   int r,g,b;
-   j=0;
+  j=0;
   for (int gridY=0; gridY<tileCount2; gridY++) {
     for (int gridX=0; gridX<tileCount2; gridX++) {
-      
-      
       String s=str(colors2[j]);
       r=(int)red(colors2[j]);
      // r=(int)map(r,0,255,255,0);
@@ -115,7 +125,10 @@ void draw() {
       colors2[j]= color(r,g,b);
       stroke(colors2[j]);
       fill(colors2[j]);
-      textSize((int)(rectSizeY2*(noise(noise1)*2+0.1)));
+      float n = (int)(rectSizeY2*(noise(noise1)*2+0.1));
+      textSize2 = (int)(rectSizeY2 + amountTextSize2);
+      textSize(textSize2);
+      //textSize((int)(rectSizeY2*(noise(noise1)*2+0.1)));
       int posX=(int)map(gridX*rectSizeX2,0,videoW,0,width);
       int posY=(int)map(gridY*rectSizeY2,0,videoH,0,height);
       //rect(gridX*rectSizeX2, gridY*rectSizeY2, rectSizeX2, rectSizeY2);
@@ -157,4 +170,24 @@ void controllerChange(int channel, int number, int value) {
   println("channel: " + channel);
   println(" number: " + number);
   println(" value: " + value);
+  
+  if(number == 16){
+    medidaTiles = (int)map(value, 0,127, minMedidaTiles, 500);
+  }
+  else if(number == 32){
+    textAlign(LEFT, BOTTOM);
+  }
+  else if(number == 33){
+    textAlign(CENTER, CENTER);
+  }
+  else if(number == 0){
+    amountTextSize1 = (int)map(value, 0,127, 0, 160);
+  }
+  else if(number == 1){
+    amountTextSize2 = (int)map(value, 0,127, 0, 160);
+  }
+  else if(number == 17){
+    alphaFondo = map(value, 0,127, 0, 255);
+  }
+
 }
