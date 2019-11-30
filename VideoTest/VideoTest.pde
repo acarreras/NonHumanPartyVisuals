@@ -30,6 +30,7 @@ MidiBus myBus;
 
 void setup() {
   size(5120, 1080);
+  //fullScreen(P2D,2);
   // MOVIE
   movies= new String[6];
   movies[0] =  "../../VIDEOS/toro1.mov";
@@ -206,13 +207,13 @@ void oscEvent(OscMessage theOscMessage) {
   /* print the address pattern and the typetag of the received OscMessage */
   print("### received an osc message.");
   if(theOscMessage.checkAddrPattern("/sound")==true) {
-    print(" addrpattern: "+theOscMessage.addrPattern());
-    println(" typetag: "+theOscMessage.typetag());
+   /// print(" addrpattern: "+theOscMessage.addrPattern());
+   // println(" typetag: "+theOscMessage.typetag());
     soundReceived=theOscMessage.get(0).intValue();
     println(" Value: "+soundReceived);
   }
   compas++;
-  compas=compas%8;
+  compas=compas%32;
   if(compas==0){
     changeVideo((int)random(0,4));
     
